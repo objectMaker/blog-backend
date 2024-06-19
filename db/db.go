@@ -2,14 +2,17 @@ package db
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/objectMaker/blog-backend/tools"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-//   dsn := "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai"
-//   db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+var DB *gorm.DB
 
 func Connect() {
+	var err error
 	dbEnvStruct := struct {
 		Host     string `envField:"host"`
 		User     string `envField:"user"`
@@ -17,7 +20,11 @@ func Connect() {
 		Dbname   string `envField:"dbname"`
 		Port     string `envField:"port"`
 	}{}
-
 	tools.LoadEnvByStruct(&dbEnvStruct)
-	fmt.Println(dbEnvStruct)
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai", dbEnvStruct.Host, dbEnvStruct.User, dbEnvStruct.Password, dbEnvStruct.Dbname, dbEnvStruct.Port)
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("failed to connect database: %v", err)
+	}
+	log.Println("database connected")
 }
