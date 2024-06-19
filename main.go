@@ -6,7 +6,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/objectMaker/blog-backend/db"
 	"github.com/objectMaker/blog-backend/router"
-	_ "github.com/objectMaker/blog-backend/router"
 )
 
 func main() {
