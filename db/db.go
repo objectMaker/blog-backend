@@ -18,7 +18,7 @@ func Connect() {
 		User     string `envField:"user"`
 		Password string `envField:"password"`
 		Dbname   string `envField:"dbname"`
-		Port     string `envField:"port"`
+		Port     string `envField:"dbport"`
 	}{}
 	tools.LoadEnvByStruct(&dbEnvStruct)
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai", dbEnvStruct.Host, dbEnvStruct.User, dbEnvStruct.Password, dbEnvStruct.Dbname, dbEnvStruct.Port)

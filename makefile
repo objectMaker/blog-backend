@@ -9,5 +9,5 @@ build:
 	-t blog-backend:1.0 \
 	.
 	
-init:
+up:
 	docker-compose up

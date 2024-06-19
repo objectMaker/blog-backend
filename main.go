@@ -1,20 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/joho/godotenv"
 	"github.com/objectMaker/blog-backend/db"
+	"github.com/objectMaker/blog-backend/router"
+	_ "github.com/objectMaker/blog-backend/router"
 )
 
-func init() {
+func main() {
 	loadEnv()
 	db.Connect()
-}
-
-func main() {
-	fmt.Println("hello blog")
+	router.New()
 }
 
 func loadEnv() {
