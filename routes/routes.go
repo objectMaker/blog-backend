@@ -9,14 +9,18 @@ import (
 )
 
 func Ping(c *gin.Context) {
-
 	result := db.DB.Create(&models.User{
 		Name: "new user",
 	})
 	if result.Error != nil {
 		log.Fatalf("failed to create user: %v", result.Error)
 	}
+	res := models.User{
+		Name: "new user",
+	}
+	db.DB.First(&res)
 	c.JSON(200, gin.H{
 		"message": "success",
+		"body":    res,
 	})
 }
