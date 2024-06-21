@@ -20,7 +20,9 @@ func New() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-	Router.GET("/ping", routes.Ping)
+
+	Router.GET("/createUser", routes.CreateUser)
+	Router.GET("/getUserList", routes.GetUserList)
 
 	Router.Run()
 }
