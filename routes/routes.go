@@ -32,7 +32,7 @@ func CreateUser(c *gin.Context) {
 }
 
 func GetUserList(c *gin.Context) {
-	users := models.User{}
+	var users []models.User
 	result := db.DB.Find(&users)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
