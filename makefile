@@ -11,3 +11,6 @@ build:
 	
 up:
 	docker-compose up
+
+migrate:
+	go run main.go --migrate

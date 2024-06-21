@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/objectMaker/blog-backend/models"
 	"github.com/objectMaker/blog-backend/tools"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -27,4 +28,8 @@ func Connect() {
 		log.Fatalf("failed to connect database: %v", err)
 	}
 	log.Println("database connected")
+}
+
+func Migration() error{
+	return DB.AutoMigrate(&models.User{})
 }
