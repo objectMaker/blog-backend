@@ -24,5 +24,5 @@ func New() {
 	Router.GET("/createUser", routes.CreateUser)
 	Router.GET("/getUserList", routes.GetUserList)
 
-	Router.Run()
+	Router.Run("localhost:8080")
 }
