@@ -21,7 +21,7 @@ func New() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	Router.GET("/createUser", routes.CreateUser)
+	Router.POST("/createUser", routes.CreateUser)
 	Router.GET("/getUserList", routes.GetUserList)
 
 	Router.Run("localhost:8080")

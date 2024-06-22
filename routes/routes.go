@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -10,16 +11,22 @@ import (
 )
 
 func CreateUser(c *gin.Context) {
-	name := c.Query("name")
-	if name == "" {
+	userInfo := struct {
+		Name string
+	}{}
+	c.BindJSON(&userInfo)
+	fmt.Println(userInfo.Name, "user name")
+	if userInfo.Name == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "missing name",
 		})
 		return
 	}
+
 	user := models.User{
-		Name: name,
+		Name: userInfo.Name,
 	}
+
 	result := db.DB.Create(&user)
 
 	if result.Error != nil {
