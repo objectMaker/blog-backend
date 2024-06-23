@@ -21,6 +21,12 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
+	if len(userInfo.Name) <= 5 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "name must longer than five characters",
+		})
+		return
+	}
 	user := models.User{
 		Name: userInfo.Name,
 	}
