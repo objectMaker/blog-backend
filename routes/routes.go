@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -15,7 +14,6 @@ func CreateUser(c *gin.Context) {
 		Name string
 	}{}
 	c.BindJSON(&userInfo)
-	fmt.Println(userInfo.Name, "user name")
 	if userInfo.Name == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "missing name",
