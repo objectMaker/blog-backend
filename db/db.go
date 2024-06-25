@@ -30,6 +30,12 @@ func Connect() {
 	log.Println("database connected")
 }
 
-func Migration() error{
-	return DB.AutoMigrate(&models.User{})
+func Migrate() {
+	err := DB.AutoMigrate(&models.User{})
+	if err != nil {
+		log.Fatal("migration failed: ", err)
+	} else {
+		// 迁移成功后退出程序
+		log.Println("migration success")
+	}
 }

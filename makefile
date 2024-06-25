@@ -12,5 +12,9 @@ build:
 up:
 	docker-compose up
 
-migrate:
-	go run main.go --migrate
+set-env:
+	go install github.com/air-verse/air@latest	
+
+tidy:
+	go mod tidy
+	go mod vendor
