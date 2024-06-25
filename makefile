@@ -17,4 +17,3 @@ set-env:
 
 tidy:
 	go mod tidy
-	go mod vendor

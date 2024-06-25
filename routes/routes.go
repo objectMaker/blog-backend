@@ -10,25 +10,24 @@ import (
 )
 
 func CreateUser(c *gin.Context) {
-	userInfo := struct {
-		Name string
-	}{}
+	userInfo := models.User{}
 	c.BindJSON(&userInfo)
-	if userInfo.Name == "" {
+
+	if userInfo.Username == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "missing name",
+			"message": "missing userName",
 		})
 		return
 	}
 
-	if len(userInfo.Name) <= 5 {
+	if len(userInfo.Username) <= 5 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "name must longer than five characters",
+			"message": "userName must longer than five characters",
 		})
 		return
 	}
 	user := models.User{
-		Name: userInfo.Name,
+		Username: userInfo.Username,
 	}
 
 	result := db.DB.Create(&user)
