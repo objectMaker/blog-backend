@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -35,6 +36,7 @@ func CreateUser(c *gin.Context) {
 	if result.Error != nil {
 		log.Fatalf("failed to create user: %v", result.Error)
 	}
+	c.SetCookie("token", "token----------------", 3600, "/", "127.0.0.1", false, true)
 	c.JSON(200, gin.H{
 		"message": "success",
 		"body":    user,
@@ -42,6 +44,7 @@ func CreateUser(c *gin.Context) {
 }
 
 func GetUserList(c *gin.Context) {
+	fmt.Println(c.GetHeader("token"), "tmd header token")
 	var users []models.User
 	result := db.DB.Find(&users)
 	if result.Error != nil {
@@ -50,6 +53,7 @@ func GetUserList(c *gin.Context) {
 		})
 		log.Fatal("failed to get user list: %w", result.Error)
 	}
+	c.SetCookie("token", "token+++++++++++++", 36000, "/", "127.0.0.1", false, true)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "success",
 		"body":    users,

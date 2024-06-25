@@ -13,7 +13,7 @@ var Router *gin.Engine
 func New() {
 	Router = gin.Default()
 	Router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowOrigins:     []string{"http://127.0.0.1:3000"},
 		AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -24,5 +24,5 @@ func New() {
 	Router.POST("/createUser", routes.CreateUser)
 	Router.GET("/getUserList", routes.GetUserList)
 
-	Router.Run("localhost:8080")
+	Router.Run("127.0.0.1:8080")
 }
