@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"strconv"
 )
 
 func LoadEnvByStruct(s interface{}) {
@@ -32,4 +33,12 @@ func LoadEnvByStruct(s interface{}) {
 
 		valueField.SetString(os.Getenv(filed))
 	}
+}
+
+func GetEnvInt(key string) (int64, error) {
+	tokenExp, err := strconv.ParseInt(os.Getenv(key), 10, 64)
+	if err != nil {
+		return 0, err
+	}
+	return tokenExp, nil
 }

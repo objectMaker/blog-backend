@@ -8,6 +8,7 @@ import (
 	"time"
 
 	v5 "github.com/golang-jwt/jwt/v5"
+	"github.com/objectMaker/blog-backend/tools"
 )
 
 func New(username string) (string, error) {
@@ -15,9 +16,16 @@ func New(username string) (string, error) {
 	if tS == "" {
 		return "", fmt.Errorf("TOKEN_SECRET is empty")
 	}
+	tokenExp, err := tools.GetEnvInt("TOKEN_EXPIRATION")
+	if err != nil {
+		fmt.Sprintln("ERROR: %w", err)
+		return "", err
+
+	}
+
 	token := v5.NewWithClaims(v5.SigningMethodHS256, v5.MapClaims{
 		"username": username,
-		"exp":      time.Now().Add(time.Hour * 24).UnixNano(),
+		"exp":      time.Now().Add(time.Hour * time.Duration(tokenExp)).Unix(),
 	})
 	tokenString, err := token.SignedString([]byte(tS))
 	if err != nil {
@@ -49,4 +57,16 @@ func ParseToken(tokenString string) (Payload, error) {
 		}, nil
 	}
 	return Payload{}, errors.New("parse token failed")
+}
+
+func ValidateToken(token string) (bool, error) {
+	payload, err := ParseToken(token)
+	if err != nil {
+		return false, err
+	}
+	//
+	if payload.Exp < float64(time.Now().UnixNano()) {
+		return false, fmt.Errorf("token expired")
+	}
+	return true, nil
 }

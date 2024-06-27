@@ -47,12 +47,6 @@ func CreateUser(c *gin.Context) {
 		Token string `json:"token"`
 		models.User
 	}
-	payload, err := jwt.ParseToken(token)
-	if err != nil {
-		log.Fatal("failed to parse token: %w", err)
-	}
-	fmt.Println(payload.Username, "username")
-	fmt.Println(payload.Exp, "exp")
 
 	c.JSON(200, gin.H{
 		"message": "success",
