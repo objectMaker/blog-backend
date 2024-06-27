@@ -1,7 +1,9 @@
 package jwt
 
 import (
+	"errors"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -22,4 +24,29 @@ func New(username string) (string, error) {
 		return "", fmt.Errorf(err.Error())
 	}
 	return tokenString, nil
+}
+
+type Payload struct {
+	Username string  `json:"username"`
+	Exp      float64 `json:"exp"`
+}
+
+func ParseToken(tokenString string) (Payload, error) {
+	token, err := v5.Parse(tokenString, func(token *v5.Token) (interface{}, error) {
+		if _, ok := token.Method.(*v5.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method")
+		}
+		return []byte(os.Getenv("TOKEN_SECRET")), nil
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if claims, ok := token.Claims.(v5.MapClaims); ok {
+		return Payload{
+			Username: claims["username"].(string),
+			Exp:      claims["exp"].(float64),
+		}, nil
+	}
+	return Payload{}, errors.New("parse token failed")
 }
