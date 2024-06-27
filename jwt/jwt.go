@@ -17,7 +17,7 @@ func New(username string) (string, error) {
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * 24).UnixNano(),
 	})
-	tokenString, err := token.SignedString(tS)
+	tokenString, err := token.SignedString([]byte(tS))
 	if err != nil {
 		return "", fmt.Errorf(err.Error())
 	}

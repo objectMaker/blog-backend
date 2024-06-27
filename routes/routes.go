@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/objectMaker/blog-backend/db"
+	"github.com/objectMaker/blog-backend/jwt"
 	"github.com/objectMaker/blog-backend/models"
 )
 
@@ -36,10 +37,22 @@ func CreateUser(c *gin.Context) {
 	if result.Error != nil {
 		log.Fatalf("failed to create user: %v", result.Error)
 	}
-	c.SetCookie("token", "token----------------", 3600, "/", "127.0.0.1", false, true)
+	token, err := jwt.New(user.Username)
+	if err != nil {
+		log.Fatal("failed to create token: %w", err)
+	}
+
+	c.SetCookie("token", token, 3600, "/", "127.0.0.1", false, true)
+	type ResResult struct {
+		Token string `json:"token"`
+		models.User
+	}
 	c.JSON(200, gin.H{
 		"message": "success",
-		"body":    user,
+		"body": ResResult{
+			Token: token,
+			User:  user,
+		},
 	})
 }
 
