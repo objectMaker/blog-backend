@@ -74,9 +74,6 @@ func GetUserList(c *gin.Context) {
 		})
 		log.Fatal("failed to get user list: %w", result.Error)
 	}
-	c.SetCookie("token", "token+++++++++++++", 36000, "/", "127.0.0.1", false, true)
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"body":    users,
-	})
+
+	tools.Res(c, users)
 }
