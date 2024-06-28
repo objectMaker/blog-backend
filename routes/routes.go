@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/objectMaker/blog-backend/db"
-	"github.com/objectMaker/blog-backend/jwt"
 	"github.com/objectMaker/blog-backend/models"
 	"github.com/objectMaker/blog-backend/tools"
 )
@@ -18,6 +17,13 @@ func CreateUser(c *gin.Context) {
 
 	if userInfo.Username == "" {
 		tools.Res(c, "missing username", http.StatusBadRequest)
+		return
+	}
+	//judge current user is exist or not
+	var dbCurrentUser models.User
+	db.DB.First(&dbCurrentUser, "username = ?", userInfo.Username)
+	if dbCurrentUser.ID != 0 {
+		tools.Res(c, "username already exists", http.StatusBadRequest)
 		return
 	}
 
@@ -41,23 +47,16 @@ func CreateUser(c *gin.Context) {
 	result := db.DB.Create(&user)
 
 	if result.Error != nil {
-		log.Fatalf("failed to create user: %v", result.Error)
+		tools.Res(c, fmt.Errorf("failed to create user: %v", result.Error), http.StatusInternalServerError)
+		return
 	}
-	token, err := jwt.New(user.Username)
-	if err != nil {
-		log.Fatal("failed to create token: %w", err)
-	}
+	// token, err := jwt.New(user.Username)
+	// if err != nil {
+	// 	log.Fatal("failed to create token: %w", err)
+	// }
+	// c.SetCookie("token", token, 3600, "/", "127.0.0.1", false, true)
 
-	c.SetCookie("token", token, 3600, "/", "127.0.0.1", false, true)
-	type ResResult struct {
-		Token string `json:"token"`
-		models.User
-	}
-
-	tools.Res(c, ResResult{
-		Token: token,
-		User:  user,
-	})
+	tools.Res(c, "success")
 }
 
 func GetUserList(c *gin.Context) {
