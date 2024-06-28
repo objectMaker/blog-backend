@@ -31,6 +31,7 @@ func CreateUser(c *gin.Context) {
 	}
 	user := models.User{
 		Username: userInfo.Username,
+		Password: userInfo.Password,
 	}
 
 	result := db.DB.Create(&user)
