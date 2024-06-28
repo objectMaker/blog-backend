@@ -9,6 +9,7 @@ import (
 	"github.com/objectMaker/blog-backend/db"
 	"github.com/objectMaker/blog-backend/jwt"
 	"github.com/objectMaker/blog-backend/models"
+	"github.com/objectMaker/blog-backend/tools"
 )
 
 func CreateUser(c *gin.Context) {
@@ -48,12 +49,9 @@ func CreateUser(c *gin.Context) {
 		models.User
 	}
 
-	c.JSON(200, gin.H{
-		"message": "success",
-		"body": ResResult{
-			Token: token,
-			User:  user,
-		},
+	tools.Res(c, ResResult{
+		Token: token,
+		User:  user,
 	})
 }
 
