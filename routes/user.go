@@ -58,6 +58,23 @@ func CreateUser(c *gin.Context) {
 
 	tools.Res(c, "success")
 }
+func SignIn(c *gin.Context) {
+	type LogInfo struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	var logInfo = LogInfo{}
+	c.BindJSON(&logInfo)
+	//logInfo
+	var userInfo models.User
+	db.DB.First(&userInfo, "username = ?", logInfo.Username)
+	if userInfo.ID == 0 {
+		tools.Res(c, "don't have the account", http.StatusUnauthorized)
+		return
+	}
+	//have the account then validate
+	
+}
 
 func GetUserList(c *gin.Context) {
 	fmt.Println(c.GetHeader("token"), "tmd header token")

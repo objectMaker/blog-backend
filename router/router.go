@@ -23,6 +23,7 @@ func New() {
 
 	Router.POST("/createUser", routes.CreateUser)
 	Router.GET("/getUserList", routes.GetUserList)
+	Router.POST("/signIn", routes.SignIn)
 
 	Router.Run("127.0.0.1:8080")
 }
