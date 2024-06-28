@@ -17,16 +17,12 @@ func CreateUser(c *gin.Context) {
 	c.BindJSON(&userInfo)
 
 	if userInfo.Username == "" {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "missing userName",
-		})
+		tools.Res(c, "missing username", http.StatusBadRequest)
 		return
 	}
 
 	if len(userInfo.Username) <= 5 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "userName must longer than five characters",
-		})
+		tools.Res(c, "username too short", http.StatusBadRequest)
 		return
 	}
 	password, err := tools.Crypto(userInfo.Password)

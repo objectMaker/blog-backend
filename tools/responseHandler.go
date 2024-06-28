@@ -13,8 +13,15 @@ func Res(c *gin.Context, data interface{}, businessCode ...int) {
 	} else {
 		code = businessCode[0]
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"data": data,
-	})
+	if code == http.StatusOK {
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"data": data,
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    code,
+			"message": data,
+		})
+	}
 }
