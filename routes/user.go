@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/objectMaker/blog-backend/db"
+	"github.com/objectMaker/blog-backend/jwt"
 	"github.com/objectMaker/blog-backend/models"
 	"github.com/objectMaker/blog-backend/tools"
 )
@@ -50,11 +51,6 @@ func CreateUser(c *gin.Context) {
 		tools.Res(c, fmt.Errorf("failed to create user: %v", result.Error), http.StatusInternalServerError)
 		return
 	}
-	// token, err := jwt.New(user.Username)
-	// if err != nil {
-	// 	log.Fatal("failed to create token: %w", err)
-	// }
-	// c.SetCookie("token", token, 3600, "/", "127.0.0.1", false, true)
 
 	tools.Res(c, "success")
 }
@@ -73,7 +69,19 @@ func SignIn(c *gin.Context) {
 		return
 	}
 	//have the account then validate
-	
+	err := tools.ComparePassword(logInfo.Password, userInfo.Password)
+
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+		tools.Res(c, "password is not correct", http.StatusUnauthorized)
+		return
+	}
+	token, err := jwt.New(userInfo.Username)
+	if err != nil {
+		log.Fatal("failed to create token: %w", err)
+	}
+	c.SetCookie("token", token, 3600, "/", "127.0.0.1", false, true)
+	tools.Res(c, nil)
 }
 
 func GetUserList(c *gin.Context) {
