@@ -29,9 +29,17 @@ func CreateUser(c *gin.Context) {
 		})
 		return
 	}
+	password, err := tools.Crypto(userInfo.Password)
+	if err != nil {
+		fmt.Println(err.Error())
+		tools.Res(c, gin.H{
+			"message": "failed to crypto password",
+		}, http.StatusInternalServerError)
+		return
+	}
 	user := models.User{
 		Username: userInfo.Username,
-		Password: userInfo.Password,
+		Password: password,
 	}
 
 	result := db.DB.Create(&user)
